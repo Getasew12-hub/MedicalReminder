@@ -1,17 +1,34 @@
-# medicine_reminder
+# Medicine Reminder
 
-A new Flutter project.
+A Flutter medication reminder app that builds to an Android APK through GitHub Actions.
 
-## Getting Started
+## Build the Android APK on GitHub
 
-This project is a starting point for a Flutter application.
+1. Push this repository to GitHub on the `main` branch.
+2. Open the repository on GitHub.
+3. Go to **Actions**.
+4. Select **Build Android APK**.
+5. Click **Run workflow**.
+6. After the workflow finishes, download the `medicine-reminder-release-apk` artifact.
 
-A few resources to get you started if this is your first Flutter project:
+The APK inside the artifact is named:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```text
+medicine-reminder-release.apk
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The workflow also runs automatically on pushes and pull requests to `main`.
+
+## Local Build
+
+```sh
+flutter pub get
+flutter test
+flutter build apk --release
+```
+
+The local APK output is created at:
+
+```text
+build/app/outputs/flutter-apk/app-release.apk
+```
