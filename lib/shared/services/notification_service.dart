@@ -11,13 +11,16 @@ class NotificationService {
       : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   final FlutterLocalNotificationsPlugin _plugin;
+  static const _channelId = 'medicine_reminders_with_sound';
+  static const _soundName = 'medicine_reminder';
 
   static const _androidChannel = AndroidNotificationChannel(
-    'medicine_reminders',
+    _channelId,
     'Medicine reminders',
     description: 'Scheduled reminders for taking medicines.',
     importance: Importance.max,
     playSound: true,
+    sound: RawResourceAndroidNotificationSound(_soundName),
     enableVibration: true,
     enableLights: true,
   );
@@ -71,6 +74,9 @@ class NotificationService {
       final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
 
+      await androidPlugin?.deleteNotificationChannel(
+        channelId: 'medicine_reminders',
+      );
       await androidPlugin?.createNotificationChannel(_androidChannel);
       await androidPlugin?.requestNotificationsPermission();
       await androidPlugin?.requestExactAlarmsPermission();
@@ -102,6 +108,7 @@ class NotificationService {
   }
 
   Future<void> scheduleMedicine(Medicine medicine) async {
+    await _configureLocalTimezone();
     await cancelMedicine(medicine.id);
 
     for (final day in medicine.days) {
@@ -113,12 +120,13 @@ class NotificationService {
         scheduledDate: _nextInstanceOfDay(day, medicine.hour, medicine.minute),
         notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
-            'medicine_reminders',
+            _channelId,
             'Medicine reminders',
             channelDescription: 'Scheduled reminders for taking medicines.',
             importance: Importance.max,
             priority: Priority.high,
             playSound: true,
+            sound: RawResourceAndroidNotificationSound(_soundName),
             enableVibration: true,
             category: AndroidNotificationCategory.reminder,
             icon: '@mipmap/ic_launcher',
@@ -127,12 +135,14 @@ class NotificationService {
             presentAlert: true,
             presentBadge: true,
             presentSound: true,
+            sound: 'medicine_reminder.wav',
             interruptionLevel: InterruptionLevel.timeSensitive,
           ),
           macOS: DarwinNotificationDetails(
             presentAlert: true,
             presentBadge: true,
             presentSound: true,
+            sound: 'medicine_reminder.wav',
             interruptionLevel: InterruptionLevel.timeSensitive,
           ),
         ),
@@ -149,12 +159,13 @@ class NotificationService {
       body: 'This is a temporary test reminder for checking sound.',
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'medicine_reminders',
+          _channelId,
           'Medicine reminders',
           channelDescription: 'Scheduled reminders for taking medicines.',
           importance: Importance.max,
           priority: Priority.high,
           playSound: true,
+          sound: RawResourceAndroidNotificationSound(_soundName),
           enableVibration: true,
           category: AndroidNotificationCategory.reminder,
           icon: '@mipmap/ic_launcher',
@@ -163,12 +174,14 @@ class NotificationService {
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
+          sound: 'medicine_reminder.wav',
           interruptionLevel: InterruptionLevel.timeSensitive,
         ),
         macOS: DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
+          sound: 'medicine_reminder.wav',
           interruptionLevel: InterruptionLevel.timeSensitive,
         ),
       ),

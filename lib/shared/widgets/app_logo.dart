@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constants/app_colors.dart';
-
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.size = 76});
 
@@ -9,26 +7,26 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(size * 0.3),
-        gradient: AppColors.primaryGradient,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.rose.withValues(alpha: 0.24),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(size * 0.2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(size * 0.2),
+          child: Image.asset(
+            'assets/images/app_logo.png',
+            fit: BoxFit.cover,
           ),
-        ],
-      ),
-      child: Transform.rotate(
-        angle: -0.65,
-        child: Icon(
-          Icons.medication_rounded,
-          color: Colors.white,
-          size: size * 0.48,
         ),
       ),
     );

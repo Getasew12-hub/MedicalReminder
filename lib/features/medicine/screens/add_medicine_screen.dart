@@ -27,11 +27,23 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   final _nameController = TextEditingController();
   final _dosageController = TextEditingController(text: '120mg');
   MedicineType _type = MedicineType.capsule;
-  TimeOfDay _time = const TimeOfDay(hour: 12, minute: 0);
-  List<String> _selectedDays = ['Tue'];
+  late TimeOfDay _time;
+  late List<String> _selectedDays;
   bool _didLoadMedicine = false;
 
   bool get _isEditing => widget.medicineId != null;
+
+  String _todayLabel() {
+    final weekday = DateTime.now().weekday;
+    return Medicine.weekDays[weekday - 1];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _time = TimeOfDay.now();
+    _selectedDays = [_todayLabel()];
+  }
 
   @override
   void didChangeDependencies() {

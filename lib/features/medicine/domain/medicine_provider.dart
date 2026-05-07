@@ -43,6 +43,7 @@ class MedicineProvider extends ChangeNotifier {
         isLoading = false;
         errorMessage = null;
         notifyListeners();
+        unawaited(_rescheduleReminders(items));
       },
       onError: (_) {
         isLoading = false;
@@ -131,6 +132,16 @@ class MedicineProvider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> _rescheduleReminders(List<Medicine> items) async {
+    try {
+      for (final medicine in items) {
+        await _notificationService.scheduleMedicine(medicine);
+      }
+    } catch (_) {
+      // Firestore is still the source of truth if local notification setup fails.
     }
   }
 
