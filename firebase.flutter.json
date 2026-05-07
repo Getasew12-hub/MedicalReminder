@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "midreminder-498dd",
+          "appId": "1:1067987728966:android:610a2004bed1ace758e847",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "midreminder-498dd",
+          "configurations": {
+            "android": "1:1067987728966:android:610a2004bed1ace758e847",
+            "web": "1:1067987728966:web:8684145b6391271158e847"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medication Reminder Auth Screens</title>
+    <style>
+      :root {
+        --rose: #c33167;
+        --rose-deep: #ad2d63;
+        --rose-soft: #f8e9f0;
+        --ink: #303039;
+        --muted: #9b98a1;
+        --line: #eeeaf0;
+        --field: #f8f7f8;
+        --white: #ffffff;
+        --shadow: 0 18px 44px rgba(53, 38, 47, 0.15);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        background: #050505;
+        color: var(--ink);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .showcase {
+        width: min(1120px, 94vw);
+        min-height: 720px;
+        padding: 70px 58px 54px;
+        position: relative;
+        overflow: hidden;
+        background: var(--white);
+      }
+
+      .showcase::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 315px;
+        background: linear-gradient(180deg, #ca396a 0%, var(--rose-deep) 100%);
+        clip-path: polygon(0 0, 100% 0, 100% 82%, 0 63%);
+      }
+
+      .title {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        margin: 0 0 48px;
+        color: var(--white);
+        font-size: 32px;
+        font-weight: 750;
+        letter-spacing: 0;
+      }
+
+      .title-pills {
+        display: flex;
+        gap: 2px;
+        transform: rotate(-28deg);
+      }
+
+      .title-pills span,
+      .brand-pill {
+        width: 38px;
+        height: 18px;
+        border-radius: 999px;
+        border: 3px solid currentColor;
+        background: linear-gradient(90deg, currentColor 0 50%, transparent 50% 100%);
+      }
+
+      .phones {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        gap: 54px;
+      }
+
+      .phone {
+        width: 284px;
+        height: 580px;
+        padding: 12px;
+        border-radius: 39px;
+        background: #111217;
+        box-shadow: 0 22px 35px rgba(0, 0, 0, 0.28);
+      }
+
+      .screen {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 30px;
+        background: var(--white);
+      }
+
+      .notch {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 98px;
+        height: 26px;
+        transform: translateX(-50%);
+        border-radius: 0 0 18px 18px;
+        background: #050505;
+        z-index: 3;
+      }
+
+      .status {
+        height: 38px;
+        padding: 12px 18px 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        font-size: 10px;
+        font-weight: 700;
+        color: #1f1f25;
+      }
+
+      .status-icons {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+
+      .signal {
+        width: 16px;
+        height: 10px;
+        background:
+          linear-gradient(to top, #1f1f25 0 35%, transparent 35%) 0 0 / 3px 100%,
+          linear-gradient(to top, #1f1f25 0 55%, transparent 55%) 5px 0 / 3px 100%,
+          linear-gradient(to top, #1f1f25 0 75%, transparent 75%) 10px 0 / 3px 100%;
+        background-repeat: no-repeat;
+      }
+
+      .battery {
+        width: 16px;
+        height: 8px;
+        border: 1.5px solid #1f1f25;
+        border-radius: 2px;
+        position: relative;
+      }
+
+      .battery::before {
+        content: "";
+        position: absolute;
+        right: -3px;
+        top: 2px;
+        width: 2px;
+        height: 3px;
+        background: #1f1f25;
+        border-radius: 0 2px 2px 0;
+      }
+
+      .battery::after {
+        content: "";
+        position: absolute;
+        inset: 1.5px 5px 1.5px 1.5px;
+        background: #1f1f25;
+        border-radius: 1px;
+      }
+
+      .content {
+        min-height: calc(100% - 38px);
+        padding: 34px 20px 18px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .auth-head {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+
+      .logo {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 19px;
+        display: grid;
+        place-items: center;
+        border-radius: 22px;
+        color: var(--white);
+        background: linear-gradient(180deg, #cf3d6d, #ad2d63);
+        box-shadow: 0 16px 30px rgba(195, 49, 103, 0.27);
+      }
+
+      .brand-pill {
+        color: var(--white);
+        transform: rotate(-35deg);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 750;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        margin: 7px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .form {
+        display: grid;
+        gap: 13px;
+      }
+
+      .field {
+        height: 47px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--field);
+        color: #b3aeb7;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      }
+
+      .field.active {
+        border-color: #e6b3c7;
+        background: var(--white);
+        box-shadow: 0 8px 18px rgba(195, 49, 103, 0.08);
+      }
+
+      .icon {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
+        color: var(--rose);
+      }
+
+      .field input {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 12px;
+      }
+
+      .field input::placeholder {
+        color: #b6b2ba;
+      }
+
+      .form-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 22px;
+      }
+
+      a {
+        color: var(--rose);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .reminder {
+        height: 44px;
+        padding: 0 4px 0 2px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #68636d;
+        font-size: 12px;
+      }
+
+      .switch {
+        width: 42px;
+        height: 24px;
+        padding: 3px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #d84878, #af2e64);
+      }
+
+      .switch::before {
+        content: "";
+        display: block;
+        width: 18px;
+        height: 18px;
+        margin-left: auto;
+        border-radius: 50%;
+        background: var(--white);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+      }
+
+      .primary {
+        width: 100%;
+        height: 45px;
+        margin-top: 5px;
+        border: 0;
+        border-radius: 12px;
+        color: var(--white);
+        background: linear-gradient(180deg, #d54676 0%, var(--rose-deep) 100%);
+        box-shadow: 0 13px 24px rgba(195, 49, 103, 0.2);
+        font-size: 12px;
+        font-weight: 750;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 21px 0 15px;
+        color: #b2aeb7;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        height: 1px;
+        flex: 1;
+        background: var(--line);
+      }
+
+      .socials {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 11px;
+      }
+
+      .social {
+        height: 43px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: var(--white);
+        color: #5b5660;
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: 0 9px 20px rgba(53, 38, 47, 0.07);
+      }
+
+      .social span {
+        display: inline-grid;
+        place-items: center;
+        width: 18px;
+        height: 18px;
+        margin-right: 7px;
+        border-radius: 50%;
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .google {
+        color: #4285f4;
+      }
+
+      .apple {
+        color: #202026;
+      }
+
+      .auth-link {
+        margin-top: auto;
+        padding: 16px 0 7px;
+        text-align: center;
+        color: #8e8992;
+        font-size: 12px;
+      }
+
+      .home-indicator {
+        position: absolute;
+        left: 50%;
+        bottom: 7px;
+        width: 104px;
+        height: 4px;
+        transform: translateX(-50%);
+        border-radius: 99px;
+        background: #090909;
+      }
+
+      .content.compact {
+        padding-top: 22px;
+      }
+
+      .content.compact .auth-head {
+        margin-bottom: 15px;
+      }
+
+      .content.compact .logo {
+        width: 62px;
+        height: 62px;
+        margin-bottom: 13px;
+        border-radius: 19px;
+      }
+
+      .content.compact h2 {
+        font-size: 23px;
+      }
+
+      .content.compact .form {
+        gap: 9px;
+      }
+
+      .content.compact .field {
+        height: 42px;
+      }
+
+      .content.compact .reminder {
+        height: 34px;
+      }
+
+      .content.compact .primary {
+        height: 42px;
+        margin-top: 1px;
+      }
+
+      .content.compact .divider {
+        margin: 14px 0 11px;
+      }
+
+      .content.compact .social {
+        height: 39px;
+      }
+
+      .content.compact .auth-link {
+        padding-top: 11px;
+      }
+
+      .corner-pulse {
+        position: absolute;
+        right: -32px;
+        top: 82px;
+        width: 118px;
+        height: 118px;
+        border-radius: 50%;
+        background: var(--rose-soft);
+        opacity: 0.76;
+      }
+
+      .corner-pulse::after {
+        content: "+";
+        position: absolute;
+        left: 36px;
+        top: 33px;
+        color: rgba(195, 49, 103, 0.3);
+        font-size: 54px;
+        font-weight: 300;
+      }
+
+      .signature {
+        position: absolute;
+        left: 42px;
+        bottom: 37px;
+        color: var(--rose);
+        font-size: 26px;
+        font-weight: 800;
+      }
+
+      @media (max-width: 760px) {
+        body {
+          display: block;
+          background: var(--white);
+        }
+
+        .showcase {
+          width: 100%;
+          min-height: 100vh;
+          padding: 44px 18px 36px;
+        }
+
+        .title {
+          flex-direction: column;
+          gap: 10px;
+          margin-bottom: 34px;
+          font-size: 25px;
+          text-align: center;
+        }
+
+        .phones {
+          flex-direction: column;
+          align-items: center;
+          gap: 34px;
+        }
+
+        .signature {
+          position: relative;
+          left: auto;
+          bottom: auto;
+          margin: 34px 0 0 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="showcase" aria-label="Medication reminder login and registration screens">
+      <h1 class="title">
+        A Medication Reminder App
+        <span class="title-pills" aria-hidden="true"><span></span><span></span></span>
+      </h1>
+
+      <section class="phones">
+        <article class="phone" aria-label="Login screen">
+          <div class="screen">
+            <div class="notch" aria-hidden="true"></div>
+            <div class="status">
+              <span>9:41</span>
+              <span class="status-icons"><span class="signal"></span><span>WiFi</span><span class="battery"></span></span>
+            </div>
+            <div class="corner-pulse" aria-hidden="true"></div>
+            <div class="content">
+              <header class="auth-head">
+                <div class="logo" aria-hidden="true"><span class="brand-pill"></span></div>
+                <h2>Welcome Back</h2>
+                <p class="subtitle">Sign in to keep your medicine schedule close and simple.</p>
+              </header>
+
+              <form class="form">
+                <label class="field active">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7.5h16v10H4z" stroke="currentColor" stroke-width="1.8" />
+                    <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8" />
+                  </svg>
+                  <input type="email" placeholder="Email" />
+                </label>
+                <label class="field">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" stroke-width="1.8" />
+                    <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8" />
+                  </svg>
+                  <input type="password" placeholder="Password" />
+                </label>
+                <div class="form-row">
+                  <span></span>
+                  <a href="#">Forgot Password?</a>
+                </div>
+                <button class="primary" type="button">Login</button>
+              </form>
+
+              <div class="divider">OR</div>
+              <div class="socials">
+                <button class="social" type="button"><span class="google">G</span>Google</button>
+                <button class="social" type="button"><span class="apple">A</span>Apple</button>
+              </div>
+
+              <p class="auth-link">Don't have an account? <a href="#">Sign Up</a></p>
+            </div>
+            <div class="home-indicator" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="phone" aria-label="Registration screen">
+          <div class="screen">
+            <div class="notch" aria-hidden="true"></div>
+            <div class="status">
+              <span>9:41</span>
+              <span class="status-icons"><span class="signal"></span><span>WiFi</span><span class="battery"></span></span>
+            </div>
+            <div class="corner-pulse" aria-hidden="true"></div>
+            <div class="content compact">
+              <header class="auth-head">
+                <div class="logo" aria-hidden="true"><span class="brand-pill"></span></div>
+                <h2>Create Account</h2>
+                <p class="subtitle">Start tracking doses and reminders with a calm daily flow.</p>
+              </header>
+
+              <form class="form">
+                <label class="field active">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8" />
+                    <path d="M5 20c1.4-4 12.6-4 14 0" stroke="currentColor" stroke-width="1.8" />
+                  </svg>
+                  <input type="text" placeholder="Full Name" />
+                </label>
+                <label class="field">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7.5h16v10H4z" stroke="currentColor" stroke-width="1.8" />
+                    <path d="m5 8 7 5 7-5" stroke="currentColor" stroke-width="1.8" />
+                  </svg>
+                  <input type="email" placeholder="Email" />
+                </label>
+                <label class="field">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" stroke-width="1.8" />
+                    <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8" />
+                  </svg>
+                  <input type="password" placeholder="Password" />
+                </label>
+                <label class="field">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" stroke-width="1.8" />
+                    <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8" />
+                  </svg>
+                  <input type="password" placeholder="Confirm Password" />
+                </label>
+                <div class="reminder">
+                  <span>Enable medicine reminders</span>
+                  <span class="switch" aria-hidden="true"></span>
+                </div>
+                <button class="primary" type="button">Sign Up</button>
+              </form>
+
+              <div class="divider">OR</div>
+              <div class="socials">
+                <button class="social" type="button"><span class="google">G</span>Google</button>
+                <button class="social" type="button"><span class="apple">A</span>Apple</button>
+              </div>
+
+              <p class="auth-link">Already have an account? <a href="#">Login</a></p>
+            </div>
+            <div class="home-indicator" aria-hidden="true"></div>
+          </div>
+        </article>
+      </section>
+
+      <div class="signature">#Wagehat 2023</div>
+    </main>
+  </body>
+</html>

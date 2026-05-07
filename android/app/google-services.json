@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1067987728966",
+    "project_id": "midreminder-498dd",
+    "storage_bucket": "midreminder-498dd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067987728966:android:610a2004bed1ace758e847",
+        "android_client_info": {
+          "package_name": "com.example.medicine_reminder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9XKCnvOuxcpKb5vKKK159dmG-y2KIG0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
