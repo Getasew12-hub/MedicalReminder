@@ -65,7 +65,7 @@ class MedicineProvider extends ChangeNotifier {
     final userId = _requireUserId();
     return _runAction(() async {
       final id = await _databaseService.addMedicine(userId, medicine);
-      await _notificationService.scheduleMedicine(medicine.copyWith(id: id));
+      unawaited(_scheduleReminderSafely(medicine.copyWith(id: id)));
     });
   }
 
@@ -73,7 +73,7 @@ class MedicineProvider extends ChangeNotifier {
     final userId = _requireUserId();
     return _runAction(() async {
       await _databaseService.updateMedicine(userId, medicine);
-      await _notificationService.scheduleMedicine(medicine);
+      unawaited(_scheduleReminderSafely(medicine));
     });
   }
 
@@ -138,10 +138,18 @@ class MedicineProvider extends ChangeNotifier {
   Future<void> _rescheduleReminders(List<Medicine> items) async {
     try {
       for (final medicine in items) {
-        await _notificationService.scheduleMedicine(medicine);
+        await _scheduleReminderSafely(medicine);
       }
     } catch (_) {
       // Firestore is still the source of truth if local notification setup fails.
+    }
+  }
+
+  Future<void> _scheduleReminderSafely(Medicine medicine) async {
+    try {
+      await _notificationService.scheduleMedicine(medicine);
+    } catch (_) {
+      // Saving the medicine should not fail just because local alarms are unavailable.
     }
   }
 

@@ -116,7 +116,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
 
     if (!mounted) return;
     if (success) {
-      context.pop();
+      context.go('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -11,7 +11,7 @@ class NotificationService {
       : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   final FlutterLocalNotificationsPlugin _plugin;
-  static const _channelId = 'medicine_reminders_with_sound';
+  static const _channelId = 'medicine_reminders_sound_v2';
   static const _soundName = 'medicine_reminder';
 
   static const _androidChannel = AndroidNotificationChannel(
@@ -77,9 +77,16 @@ class NotificationService {
       await androidPlugin?.deleteNotificationChannel(
         channelId: 'medicine_reminders',
       );
+      await androidPlugin?.deleteNotificationChannel(
+        channelId: 'medicine_reminders_with_sound',
+      );
       await androidPlugin?.createNotificationChannel(_androidChannel);
       await androidPlugin?.requestNotificationsPermission();
-      await androidPlugin?.requestExactAlarmsPermission();
+      try {
+        await androidPlugin?.requestExactAlarmsPermission();
+      } catch (_) {
+        // If exact alarms are denied, reminders fall back to inexact scheduling.
+      }
       return;
     }
 
@@ -110,6 +117,7 @@ class NotificationService {
   Future<void> scheduleMedicine(Medicine medicine) async {
     await _configureLocalTimezone();
     await cancelMedicine(medicine.id);
+    final androidScheduleMode = await _androidScheduleMode();
 
     for (final day in medicine.days) {
       final notificationId = notificationIdFor(medicine.id, day);
@@ -146,10 +154,31 @@ class NotificationService {
             interruptionLevel: InterruptionLevel.timeSensitive,
           ),
         ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: androidScheduleMode,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
     }
+  }
+
+  Future<AndroidScheduleMode> _androidScheduleMode() async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
+      return AndroidScheduleMode.exactAllowWhileIdle;
+    }
+
+    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+
+    try {
+      final canScheduleExact =
+          await androidPlugin?.canScheduleExactNotifications();
+      if (canScheduleExact == false) {
+        return AndroidScheduleMode.inexactAllowWhileIdle;
+      }
+    } catch (_) {
+      return AndroidScheduleMode.inexactAllowWhileIdle;
+    }
+
+    return AndroidScheduleMode.exactAllowWhileIdle;
   }
 
   Future<void> showTestNotificationNow() {
